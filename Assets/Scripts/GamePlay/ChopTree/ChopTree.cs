@@ -26,9 +26,11 @@ namespace GamePlay.ChopTree
 
         private List<TreeTrunk> _trunks;
         private bool _initialized = false;
+        private AnimationFinishedCallback _FinishedInitializeCallback;
         // Start is called before the first frame update
-        public void Initialize()
+        public void Initialize(AnimationFinishedCallback callback = null)
         {
+            _FinishedInitializeCallback = callback;
             int randomVariability = Random.Range(0, _variabilityTreeTrunks + 1);
             int numberOfTrunks = _minTreeTrunks + randomVariability;
 
@@ -61,6 +63,7 @@ namespace GamePlay.ChopTree
         private void finishedInitialize()
         {
             _initialized = true;
+            if (_FinishedInitializeCallback != null) _FinishedInitializeCallback();
         }
     }
 }

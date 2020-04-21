@@ -4,29 +4,23 @@ using UnityEngine;
 
 // Dependencies
 using GamePlay.ChopTree;
+using Controllers;
 
 namespace Managers
 {
     public class TreeManager : SingletonMonobehaviour<TreeManager>
-    {
-        [SerializeField]
-        private int _numberOfTrees;        
+    {    
         [SerializeField]
         private GameObject _treePrefab;
+        [SerializeField]
+        private CameraController _cameraController;
 
-        private List<ChopTree> _trees;
+        private ChopTree _currentTree;
         public void Initialize()
         {
             _instance = this;
-            _trees = new List<ChopTree>(_numberOfTrees);
 
-            for (int i = 0; i < _numberOfTrees; i++)
-            {
-                GameObject tree = Instantiate(_treePrefab, transform);
-                _trees.Add(tree.GetComponent<ChopTree>());
-            }
-
-            _trees[0].Initialize();
+            CreatenewTree();
         }
 
         // Update is called once per frame
@@ -37,14 +31,30 @@ namespace Managers
 
         public void ChopTree()
         {
-            if (_trees[0].ChopATrunk())
+            if (_currentTree.ChopATrunk())
             {
-                Destroy(_trees[0].gameObject);
-                _trees.RemoveAt(0);
-                GameObject newTree = Instantiate(_treePrefab, transform);
-                _trees.Add(newTree.GetComponent<ChopTree>());
-                _trees[0].Initialize();
+                CreatenewTree();
             }
+        }
+
+        private void CreatenewTree()
+        {
+            GameObject newTree = Instantiate(_treePrefab, transform);
+
+            if (_currentTree)
+            {
+                Vector3 currentTreePosition = new Vector3(_currentTree.transform.position.x, 0, _currentTree.transform.position.z);
+                newTree.transform.position = currentTreePosition + new Vector3(Random.Range(-10, 10), 0, 30);
+                Destroy(_currentTree.gameObject);
+            }
+
+            _currentTree = newTree.GetComponent<ChopTree>();
+            _currentTree.Initialize(FocusTree);
+        }
+
+        private void FocusTree()
+        {
+            _cameraController.ChangeFocus(_currentTree.transform);
         }
     }
 }
