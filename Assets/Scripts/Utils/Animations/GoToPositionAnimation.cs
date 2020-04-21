@@ -7,7 +7,7 @@ namespace Utils.Animations
         private Vector3 _targetPosition;
         private Vector3 _startPosition;
 
-        private void Update() 
+        protected override void ProcessNextFrame() 
         {
             if (_running)
             {
@@ -17,14 +17,14 @@ namespace Utils.Animations
                     AnimationFinished();
                 } else {
                     float t = EvaluateCurveTime();
-                    transform.position = Vector3.Lerp(_startPosition, _targetPosition, t);
+                    transform.position = Vector3.LerpUnclamped(_startPosition, _targetPosition, t);
                 }
             }
         }
 
-        public void RunGoToPositionAnimation(Vector3 startPosition, Vector3 targetPosition, float time = 1, AnimationCurve animationCurve = null, AnimationFinishedCallback callback = null)
+        public void RunGoToPositionAnimation(Vector3 startPosition, Vector3 targetPosition, float time = 1, bool onLateUpdate = false, AnimationCurve animationCurve = null, AnimationFinishedCallback callback = null)
         {
-            RunAnimation(time, animationCurve, callback);
+            RunAnimation(time, onLateUpdate, animationCurve, callback);
             _startPosition = startPosition;
             _targetPosition = targetPosition;
 

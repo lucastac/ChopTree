@@ -10,6 +10,22 @@ namespace Utils.Animations
         protected float _timeToComplete;
         protected float _currentTime;
         protected bool _running = false;
+        protected bool _onLateUpdate = false;
+
+        protected virtual void Update()
+        {
+            if (!_onLateUpdate) ProcessNextFrame();
+        }
+
+        protected virtual void LateUpdate()
+        {
+            if (_onLateUpdate) ProcessNextFrame();
+        }
+
+        protected virtual void ProcessNextFrame()
+        {
+
+        }
 
         protected virtual float EvaluateCurve(float t)
         {
@@ -21,10 +37,11 @@ namespace Utils.Animations
         {
             return EvaluateCurve(_currentTime / _timeToComplete);
         }
-        protected virtual void RunAnimation(float timeToComplete, AnimationCurve animationCurve, AnimationFinishedCallback callback = null)
+        protected virtual void RunAnimation(float timeToComplete = 1, bool onLateUpdate = false, AnimationCurve animationCurve = null, AnimationFinishedCallback callback = null)
         {
             _animationCurve = animationCurve;
             _timeToComplete = timeToComplete;
+            _onLateUpdate = onLateUpdate;
             _AnimationFinishedCallback = callback;
         }
 

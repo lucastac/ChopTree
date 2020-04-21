@@ -37,8 +37,14 @@ namespace Managers
 
         public void ChopTree()
         {
-            _trees[0].ChopATrunk();
-
+            if (_trees[0].ChopATrunk())
+            {
+                Destroy(_trees[0].gameObject);
+                _trees.RemoveAt(0);
+                GameObject newTree = Instantiate(_treePrefab, transform);
+                _trees.Add(newTree.GetComponent<ChopTree>());
+                _trees[0].Initialize();
+            }
         }
     }
 }

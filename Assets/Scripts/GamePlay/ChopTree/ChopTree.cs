@@ -10,7 +10,9 @@ namespace GamePlay.ChopTree
     public class ChopTree : MonoBehaviour
     {
         [SerializeField]
-        private AnimationCurve _animationCurve;
+        private AnimationCurve _initializeAnimationCurve;
+        [SerializeField]
+        private AnimationCurve _chopAnimationCurve;
         [SerializeField]
         [Range(0, 20)]
         private int _minTreeTrunks;
@@ -23,6 +25,7 @@ namespace GamePlay.ChopTree
         private float _trunkOffset = 7.3f;
 
         private List<TreeTrunk> _trunks;
+        private bool _initialized = false;
         // Start is called before the first frame update
         public void Initialize()
         {
@@ -35,6 +38,8 @@ namespace GamePlay.ChopTree
                 GameObject trunk = Instantiate(_trunkPrefab, transform.position + Vector3.up * _trunkOffset * i, _trunkPrefab.transform.rotation, transform);
                 _trunks.Add(trunk.GetComponent<TreeTrunk>());
             }
+
+            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position - Vector3.up * _trunkOffset * _trunks.Count, transform.position, 1f, false, _initializeAnimationCurve, finishedInitialize);
         }
 
         // Update is called once per frame
@@ -43,11 +48,19 @@ namespace GamePlay.ChopTree
 
         }
 
-        public void ChopATrunk()
+        public bool ChopATrunk()
         {
+            if (!_initialized) return false;
+            if (_trunks.Count == 0) return true;
             _trunks[0].Chop();
             _trunks.RemoveAt(0);
-            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position, transform.position - Vector3.up * _trunkOffset, 0.3f, _animationCurve);
+            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position, transform.position - Vector3.up * _trunkOffset, 0.3f, false, _chopAnimationCurve);
+            return _trunks.Count == 0;
+        }
+
+        private void finishedInitialize()
+        {
+            _initialized = true;
         }
     }
 }
