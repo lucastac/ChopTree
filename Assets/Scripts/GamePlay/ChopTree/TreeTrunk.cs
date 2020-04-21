@@ -17,5 +17,10 @@ namespace GamePlay.ChopTree
         {
 
         }
+
+        public void Chop()
+        {
+            Destroy(gameObject);
+        }
     }
 }

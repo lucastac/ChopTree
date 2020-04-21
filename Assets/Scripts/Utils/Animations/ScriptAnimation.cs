@@ -2,10 +2,9 @@ using UnityEngine;
 
 namespace Utils.Animations
 {
+    public delegate void AnimationFinishedCallback();
     public abstract class ScriptAnimation : MonoBehaviour 
     {
-        public delegate void AnimationFinishedCallback();
-
         protected AnimationCurve _animationCurve;       
         protected AnimationFinishedCallback _AnimationFinishedCallback;
         protected float _timeToComplete;
@@ -22,7 +21,7 @@ namespace Utils.Animations
         {
             return EvaluateCurve(_currentTime / _timeToComplete);
         }
-        protected virtual void RunAnimation(AnimationCurve animationCurve, float timeToComplete, AnimationFinishedCallback callback = null)
+        protected virtual void RunAnimation(float timeToComplete, AnimationCurve animationCurve, AnimationFinishedCallback callback = null)
         {
             _animationCurve = animationCurve;
             _timeToComplete = timeToComplete;
@@ -31,7 +30,7 @@ namespace Utils.Animations
 
         protected virtual void AnimationFinished()
         {
-            _AnimationFinishedCallback();
+            if (_AnimationFinishedCallback != null) _AnimationFinishedCallback();
             _running = false;
             Destroy(this);
         }

@@ -34,5 +34,11 @@ namespace Managers
         {
 
         }
+
+        public void ChopTree()
+        {
+            _trees[0].ChopATrunk();
+
+        }
     }
 }

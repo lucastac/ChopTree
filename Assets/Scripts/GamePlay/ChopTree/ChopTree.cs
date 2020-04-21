@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Dependencies
+using Utils.Animations;
+
 namespace GamePlay.ChopTree
 {
     public class ChopTree : MonoBehaviour
     {
+        [SerializeField]
+        private AnimationCurve _animationCurve;
         [SerializeField]
         [Range(0, 20)]
         private int _minTreeTrunks;
@@ -36,6 +41,13 @@ namespace GamePlay.ChopTree
         void Update()
         {
 
+        }
+
+        public void ChopATrunk()
+        {
+            _trunks[0].Chop();
+            _trunks.RemoveAt(0);
+            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position, transform.position - Vector3.up * _trunkOffset, 0.3f, _animationCurve);
         }
     }
 }
