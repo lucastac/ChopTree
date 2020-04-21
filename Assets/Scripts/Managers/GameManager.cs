@@ -4,22 +4,22 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class GameManager : SingletonMonobehaviour<GameManager>
+    public class GameManager : MonoBehaviour
     {
         [SerializeField]
         private TreeManager _treeManager;
+        [SerializeField]
+        private InputManager _inputManager;
         // Start is called before the first frame update
         void Start()
         {
-            _instance = this;
-
             _treeManager.Initialize();
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (_inputManager.chopTreeAction())
             {
                 _treeManager.ChopTree();
             }

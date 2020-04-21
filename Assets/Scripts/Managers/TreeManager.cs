@@ -8,7 +8,7 @@ using Controllers;
 
 namespace Managers
 {
-    public class TreeManager : SingletonMonobehaviour<TreeManager>
+    public class TreeManager : MonoBehaviour
     {    
         [SerializeField]
         private GameObject _treePrefab;
@@ -18,8 +18,6 @@ namespace Managers
         private ChopTree _currentTree;
         public void Initialize()
         {
-            _instance = this;
-
             CreatenewTree();
         }
 

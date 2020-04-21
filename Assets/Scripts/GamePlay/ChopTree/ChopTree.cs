@@ -26,8 +26,9 @@ namespace GamePlay.ChopTree
 
         private List<TreeTrunk> _trunks;
         private bool _initialized = false;
+        private bool _chopping = false;
         private AnimationFinishedCallback _FinishedInitializeCallback;
-        // Start is called before the first frame update
+
         public void Initialize(AnimationFinishedCallback callback = null)
         {
             _FinishedInitializeCallback = callback;
@@ -44,20 +45,20 @@ namespace GamePlay.ChopTree
             AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position - Vector3.up * _trunkOffset * _trunks.Count, transform.position, 1f, false, _initializeAnimationCurve, finishedInitialize);
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public bool ChopATrunk()
         {
-            if (!_initialized) return false;
+            if (!_initialized || _chopping) return false;
             if (_trunks.Count == 0) return true;
+            _chopping = true;
             _trunks[0].Chop();
             _trunks.RemoveAt(0);
-            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position, transform.position - Vector3.up * _trunkOffset, 0.3f, false, _chopAnimationCurve);
+            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position, transform.position - Vector3.up * _trunkOffset, 0.3f, false, _chopAnimationCurve, finishedChop);
             return _trunks.Count == 0;
+        }
+
+        private void finishedChop()
+        {
+            _chopping = false;
         }
 
         private void finishedInitialize()
