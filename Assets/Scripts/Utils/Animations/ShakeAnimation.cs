@@ -6,13 +6,13 @@ namespace Utils.Animations
 {
     public class ShakeAnimation : ScriptAnimation
     {
-        private Vector3 _originalPosition;
-        private float _magnitude;
+        private Vector3 _originalPosition; // Original position of the object before starts the shake
+        private float _magnitude; // Magnitude of the shake
 
         protected override void ProcessNextFrame()
         {
             _currentTime += Time.deltaTime;
-            if (_currentTime >= _timeToComplete)
+            if (_currentTime >= _duration)
             {
                 transform.position = _originalPosition;
                 AnimationFinished();
@@ -25,6 +25,7 @@ namespace Utils.Animations
             }
         }
 
+        // Start the shake animation
         public void RunShakeAnimation(float magnitude, float time = 1, bool onLateUpdate = false, AnimationCurve animationCurve = null, AnimationFinishedCallback callback = null)
         {
             RunAnimation(time, onLateUpdate, animationCurve, callback);

@@ -7,16 +7,15 @@ namespace Utils
     public class Follow : MonoBehaviour
     {
         [SerializeField]
-        private Transform _target;
+        private Transform _target; // Target object to follow
 
-        private Vector3 _offset;
-        // Start is called before the first frame update
+        private Vector3 _offset; // Offset position from target position
+
         void Start()
         {
             _offset = transform.position - _target.position;
         }
 
-        // Update is called once per frame
         private void Update()
         {
             if (_target != null) transform.position = _target.position + _offset;

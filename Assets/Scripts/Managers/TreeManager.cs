@@ -11,38 +11,35 @@ namespace Managers
     public class TreeManager : MonoBehaviour
     {    
         [SerializeField]
-        private GameObject _treePrefab;
+        private GameObject _treePrefab; // Prefab of a choptree
         [SerializeField]
-        private CameraController _cameraController;
+        private CameraController _cameraController; // Reference to the camera controller
 
-        private ChopTree _currentTree;
-        private bool _focusTree = true;
+        private ChopTree _currentTree; // Current target tree
+        private bool _focusTree = true; // Informe if currently there is a tree focused by the camera
+        
         public void Initialize()
         {
             CreatenewTree();
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
+        // Perform a chop on the currently tree
         public void ChopTree()
         {
             if (_focusTree)
             {
                 if (_currentTree.ChopATrunk())
                 {
-                    CreatenewTree();
+                    CreatenewTree(); // If the current tree is over, then create a new one
                 }
                 else
                 {
-                    _cameraController.Shake(0.4f, 0.2f);
+                    _cameraController.Shake(0.4f, 0.2f); // If a trunk was chopped, then shake the camera
                 }
             }
         }
 
+        // Create a new tree and destroy the previous one
         private void CreatenewTree()
         {
             GameObject newTree = Instantiate(_treePrefab, transform);
@@ -59,11 +56,13 @@ namespace Managers
             _currentTree.Initialize(FocusTree);
         }
 
+        // Informe camera to focus on the new tree
         private void FocusTree()
         {
             _cameraController.ChangeFocus(_currentTree.transform, finishedFocusTreeAnimation);
         }
 
+        // Called when the camera has successfully focused the new tree
         private void finishedFocusTreeAnimation()
         {
             _focusTree = true;

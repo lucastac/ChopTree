@@ -10,28 +10,28 @@ namespace GamePlay.ChopTree
     public class ChopTree : MonoBehaviour
     {
         [SerializeField]
-        private AnimationCurve _initializeAnimationCurve;
+        private AnimationCurve _initializeAnimationCurve; // Animation curve for creating tree animation
         [SerializeField]
-        private AnimationCurve _chopAnimationCurve;
+        private AnimationCurve _chopAnimationCurve; // Animation curve for chopping a trunk animation
         [SerializeField]
         [Range(0, 20)]
-        private int _minTreeTrunks;
+        private int _minTreeTrunks; // Minimum amount of trunks in a tree
         [SerializeField]
         [Range(0, 4)]
-        private int _variabilityTreeTrunks;
+        private int _variabilityTreeTrunks; // Max random variability amount of trunks
         [SerializeField]
-        private GameObject _trunkPrefab;
+        private GameObject _trunkPrefab; // Reference to the trunk prefab
         [SerializeField]
-        private float _trunkOffset = 7.3f;
+        private float _trunkOffset = 7.3f; // distance between 2 neighbor trunks
         [SerializeField]
-        private GameObject _trunksRoot;
+        private GameObject _trunksRoot; // Reference to the GameObject used as root to the trunks
         [SerializeField]
-        private GameObject _bottomGrass;
+        private GameObject _bottomGrass; // Reference to the GameObject grass at the bottom of the tree
 
-        private List<TreeTrunk> _trunks;
-        private bool _initialized = false;
-        private bool _chopping = false;
-        private AnimationFinishedCallback _FinishedInitializeCallback;
+        private List<TreeTrunk> _trunks; // The list with all trunks in the tree
+        private bool _initialized = false; // Informe if the tree has been initialized
+        private bool _chopping = false; // Informe if a chop action is currently in progress
+        private AnimationFinishedCallback _FinishedInitializeCallback; // Callback function to be called when the tree has been initialized
 
         public void Initialize(AnimationFinishedCallback callback = null)
         {
@@ -46,10 +46,13 @@ namespace GamePlay.ChopTree
                 _trunks.Add(trunk.GetComponent<TreeTrunk>());
             }
 
+            // Animate the trunks position
             AnimationHelper.AnimateObjectPosition(_trunksRoot, _trunksRoot.transform.position - Vector3.up * _trunkOffset * _trunks.Count, _trunksRoot.transform.position, 1f, false, _initializeAnimationCurve, finishedInitialize);
+            // Animate the bottom grass scale
             AnimationHelper.AnimateObjectScale(_bottomGrass, _bottomGrass.transform.localScale * 0.3f, _bottomGrass.transform.localScale, 0.5f, false, _chopAnimationCurve);
         }
 
+        // Remove one trunk from the tree and run the animation
         public bool ChopATrunk()
         {
             if (!_initialized || _chopping) return false;
@@ -61,11 +64,13 @@ namespace GamePlay.ChopTree
             return _trunks.Count == 0;
         }
 
+        // Funtion called when the chop animation has finished
         private void finishedChop()
         {
             _chopping = false;
         }
 
+        // Funtion called when the initialize tree animation has finished
         private void finishedInitialize()
         {
             _initialized = true;

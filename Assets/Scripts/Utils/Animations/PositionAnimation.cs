@@ -4,24 +4,22 @@ namespace Utils.Animations
 {
     public class PositionAnimation : ScriptAnimation 
     {
-        private Vector3 _targetPosition;
-        private Vector3 _startPosition;
+        private Vector3 _targetPosition; // Position of the object at the start of the animation
+        private Vector3 _startPosition; // Position of the object at the end of the animation
 
         protected override void ProcessNextFrame() 
         {
-            if (_running)
+            _currentTime += Time.deltaTime;
+            if (_currentTime >= _duration)
             {
-                _currentTime += Time.deltaTime;
-                if (_currentTime >= _timeToComplete)
-                {
-                    AnimationFinished();
-                } else {
-                    float t = EvaluateCurveTime();
-                    transform.position = Vector3.LerpUnclamped(_startPosition, _targetPosition, t);
-                }
+                AnimationFinished();
+            } else {
+                float t = EvaluateCurveTime();
+                transform.position = Vector3.LerpUnclamped(_startPosition, _targetPosition, t);
             }
         }
 
+        // Start the position animation
         public void RunPositionAnimation(Vector3 startPosition, Vector3 targetPosition, float time = 1, bool onLateUpdate = false, AnimationCurve animationCurve = null, AnimationFinishedCallback callback = null)
         {
             RunAnimation(time, onLateUpdate, animationCurve, callback);
