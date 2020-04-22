@@ -510,7 +510,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _target: {fileID: 1687258585}
-  _onLateUpdate: 0
 --- !u!1 &1298583589
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,7 +717,7 @@ GameObject:
   - component: {fileID: 1965033469}
   - component: {fileID: 1965033468}
   m_Layer: 0
-  m_Name: Image
+  m_Name: ClickScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

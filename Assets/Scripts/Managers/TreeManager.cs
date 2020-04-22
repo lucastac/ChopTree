@@ -16,6 +16,7 @@ namespace Managers
         private CameraController _cameraController;
 
         private ChopTree _currentTree;
+        private bool _focusTree = true;
         public void Initialize()
         {
             CreatenewTree();
@@ -29,9 +30,16 @@ namespace Managers
 
         public void ChopTree()
         {
-            if (_currentTree.ChopATrunk())
+            if (_focusTree)
             {
-                CreatenewTree();
+                if (_currentTree.ChopATrunk())
+                {
+                    CreatenewTree();
+                }
+                else
+                {
+                    _cameraController.Shake(0.4f, 0.2f);
+                }
             }
         }
 
@@ -46,13 +54,19 @@ namespace Managers
                 Destroy(_currentTree.gameObject);
             }
 
+            _focusTree = false;
             _currentTree = newTree.GetComponent<ChopTree>();
             _currentTree.Initialize(FocusTree);
         }
 
         private void FocusTree()
         {
-            _cameraController.ChangeFocus(_currentTree.transform);
+            _cameraController.ChangeFocus(_currentTree.transform, finishedFocusTreeAnimation);
+        }
+
+        private void finishedFocusTreeAnimation()
+        {
+            _focusTree = true;
         }
     }
 }

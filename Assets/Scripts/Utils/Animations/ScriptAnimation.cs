@@ -14,12 +14,12 @@ namespace Utils.Animations
 
         protected virtual void Update()
         {
-            if (!_onLateUpdate) ProcessNextFrame();
+            if (!_onLateUpdate && _running) ProcessNextFrame();
         }
 
         protected virtual void LateUpdate()
         {
-            if (_onLateUpdate) ProcessNextFrame();
+            if (_onLateUpdate && _running) ProcessNextFrame();
         }
 
         protected virtual void ProcessNextFrame()

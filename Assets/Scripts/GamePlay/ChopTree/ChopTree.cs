@@ -23,6 +23,10 @@ namespace GamePlay.ChopTree
         private GameObject _trunkPrefab;
         [SerializeField]
         private float _trunkOffset = 7.3f;
+        [SerializeField]
+        private GameObject _trunksRoot;
+        [SerializeField]
+        private GameObject _bottomGrass;
 
         private List<TreeTrunk> _trunks;
         private bool _initialized = false;
@@ -38,11 +42,12 @@ namespace GamePlay.ChopTree
             _trunks = new List<TreeTrunk>(numberOfTrunks);
             for (int i = 0; i < numberOfTrunks; i++)
             {
-                GameObject trunk = Instantiate(_trunkPrefab, transform.position + Vector3.up * _trunkOffset * i, _trunkPrefab.transform.rotation, transform);
+                GameObject trunk = Instantiate(_trunkPrefab, transform.position + Vector3.up * _trunkOffset * i, _trunkPrefab.transform.rotation, _trunksRoot.transform);
                 _trunks.Add(trunk.GetComponent<TreeTrunk>());
             }
 
-            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position - Vector3.up * _trunkOffset * _trunks.Count, transform.position, 1f, false, _initializeAnimationCurve, finishedInitialize);
+            AnimationHelper.AnimateObjectPosition(_trunksRoot, _trunksRoot.transform.position - Vector3.up * _trunkOffset * _trunks.Count, _trunksRoot.transform.position, 1f, false, _initializeAnimationCurve, finishedInitialize);
+            AnimationHelper.AnimateObjectScale(_bottomGrass, _bottomGrass.transform.localScale * 0.3f, _bottomGrass.transform.localScale, 0.5f, false, _chopAnimationCurve);
         }
 
         public bool ChopATrunk()
@@ -52,7 +57,7 @@ namespace GamePlay.ChopTree
             _chopping = true;
             _trunks[0].Chop();
             _trunks.RemoveAt(0);
-            AnimationHelper.AnimateObjectGoToPosition(gameObject, transform.position, transform.position - Vector3.up * _trunkOffset, 0.3f, false, _chopAnimationCurve, finishedChop);
+            AnimationHelper.AnimateObjectPosition(_trunksRoot, _trunksRoot.transform.position, _trunksRoot.transform.position - Vector3.up * _trunkOffset, 0.3f, false, _chopAnimationCurve, finishedChop);
             return _trunks.Count == 0;
         }
 

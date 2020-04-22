@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Utils.Animations
 {
-    public class GoToPositionAnimation : ScriptAnimation 
+    public class PositionAnimation : ScriptAnimation 
     {
         private Vector3 _targetPosition;
         private Vector3 _startPosition;
@@ -22,7 +22,7 @@ namespace Utils.Animations
             }
         }
 
-        public void RunGoToPositionAnimation(Vector3 startPosition, Vector3 targetPosition, float time = 1, bool onLateUpdate = false, AnimationCurve animationCurve = null, AnimationFinishedCallback callback = null)
+        public void RunPositionAnimation(Vector3 startPosition, Vector3 targetPosition, float time = 1, bool onLateUpdate = false, AnimationCurve animationCurve = null, AnimationFinishedCallback callback = null)
         {
             RunAnimation(time, onLateUpdate, animationCurve, callback);
             _startPosition = startPosition;
